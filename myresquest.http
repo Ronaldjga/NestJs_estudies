@@ -1,0 +1,17 @@
+GET http://localhost:3333/auth/users
+
+###
+
+GET http://localhost:3333/auth/users/f08361d1-0c1d-46bb-bf7a-e8c617aaae22
+
+###
+
+POST http://localhost:3333/auth/register
+Content-Type: application/json
+
+
+{
+    "name": "jose",
+    "lastname": "gama",
+    "email": "ronalalmeida20022003@gmail.com"
+}
