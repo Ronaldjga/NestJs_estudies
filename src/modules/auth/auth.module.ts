@@ -1,17 +1,13 @@
-import { Module } from "@nestjs/common";
-import { AuthService } from "./services/auth.service";
-import { AuthGatewayInMemory } from "./geteway/auth-gateway-in-memory";
-import { AuthController } from "./controllers/auth.controller";
-import { CreateUserPipe } from "./pipes/createUser.pipe";
-import { AdminGuard } from "./guards/auth.guard";
+import { Module } from '@nestjs/common';
+import { AuthService } from './services/auth.service';
+import { AuthController } from './controllers/auth.controller';
+import { UsersGatewayInMemory } from '../users/geteway/users-gateway-in-memory';
 
 @Module({
-    imports: [],
-    controllers: [AuthController],
-    providers: [
-        AuthService,
-        AuthGatewayInMemory,
-        CreateUserPipe,
-    ]
+  controllers: [AuthController],
+  providers: [
+    AuthService,
+    UsersGatewayInMemory
+  ],
 })
 export class AuthModule {}
