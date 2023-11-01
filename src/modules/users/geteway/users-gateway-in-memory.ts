@@ -25,7 +25,7 @@ export class UsersGatewayInMemory implements IUsersGateway {
         return allUsers
     }
 
-    async findById(id: string): Promise<User> {
+    async findById(id: string): Promise<Omit<User, 'password'>> {
         const targetUser = this.usersList.find(user => user.id === id ? {
             id: user.id,
             username: user.username,
