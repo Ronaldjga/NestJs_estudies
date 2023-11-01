@@ -9,7 +9,7 @@ export class UsersGatewayInMemory implements IUsersGateway {
     private usersList: User[] = []
 
     async register(newUser: ICreateUserDto): Promise<void> {
-        const user = new User(newUser.name, newUser.lastname, newUser.email, newUser.password)
+        const user = new User(newUser.username, newUser.email, newUser.password)
         user.id = randomUUID()
         this.usersList.push(user)
     }
@@ -18,8 +18,7 @@ export class UsersGatewayInMemory implements IUsersGateway {
         const allUsers = this.usersList.map(user => {
             return {
                 id: user.id,
-                name: user.name,
-                lastname: user.lastname,
+                username: user.username,
                 email: user.email
             }
         })
@@ -29,8 +28,7 @@ export class UsersGatewayInMemory implements IUsersGateway {
     async findById(id: string): Promise<User> {
         const targetUser = this.usersList.find(user => user.id === id ? {
             id: user.id,
-            name: user.name,
-            lastname: user.lastname,
+            username: user.username,
             email: user.email
         } : [])
         return targetUser

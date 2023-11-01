@@ -9,9 +9,9 @@ export class CreateUserPipe implements PipeTransform {
             throw new BadRequestException("O campo 'id' não deve ser enviado")
         }
         return {
-            name: String(value.name),
-            lastname: String(value.lastname),
-            email: String(value.email)
+            username: String(value.username),
+            email: String(value.email),
+            password: String(value.password)
         }
     }
 }
