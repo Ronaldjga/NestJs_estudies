@@ -7,7 +7,6 @@ import { UsersGatewayInMemory } from '../users/geteway/users-gateway-in-memory';
   controllers: [AuthController],
   providers: [
     AuthService,
-    UsersGatewayInMemory
   ],
 })
 export class AuthModule {}

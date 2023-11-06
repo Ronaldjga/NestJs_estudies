@@ -5,6 +5,7 @@ import { AuthController } from "./controllers/user.controller";
 import { CreateUserPipe } from "./pipes/createUser.pipe";
 import { UsersGatewayMysqlDatabase } from "./geteway/users-gateway-mysql-database";
 import { PrismaService } from "src/databases/prisma.service";
+import { HashPassword } from "src/services/hashPassword.service";
 
 @Module({
     imports: [],
@@ -14,7 +15,8 @@ import { PrismaService } from "src/databases/prisma.service";
         UsersGatewayInMemory,
         CreateUserPipe,
         UsersGatewayMysqlDatabase,
-        PrismaService
+        PrismaService,
+        HashPassword
     ]
 })
 export class UsersModule {}
