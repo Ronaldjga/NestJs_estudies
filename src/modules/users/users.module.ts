@@ -17,6 +17,9 @@ import { HashPassword } from "src/services/hashPassword.service";
         UsersGatewayMysqlDatabase,
         PrismaService,
         HashPassword
+    ],
+    exports: [
+        UsersService
     ]
 })
 export class UsersModule {}

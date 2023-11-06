@@ -59,4 +59,19 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
         return targetUser
     }
 
+    async findByUsername(username: string): Promise<Omit<User, "password">> {
+        const targetUser = await this.prisma.user.findUnique({
+            where: {
+                username: username
+            },
+            select: {
+                id: true,
+                username: true,
+                email: true
+            }
+        })
+
+        return targetUser
+    }
+
 }

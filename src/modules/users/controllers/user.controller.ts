@@ -16,10 +16,10 @@ export class AuthController{
         return await this.usersService.findAll()
     }
 
-    @Get(":id")
+    @Get(":idOrUsername")
     @UseGuards(UsersGuard)
-    async getUserById(@Param('id') id: string){
-        return await this.usersService.findById(id)
+    async getUserById(@Param('idOrUsername') idOrUsername: string){
+        return await this.usersService.findUserByIdOrUsername(idOrUsername)
     }
 
     @Post("register")

@@ -13,7 +13,7 @@ export class UsersGatewayInMemory implements IUsersGateway {
     private usersList: User[] = []
 
     async register(newUser: ICreateUserDto): Promise<void> {
-        const userAlreadyExists = this.usersList.some(userData => userData.email === newUser.email)
+        const userAlreadyExists = this.usersList.some(userData => userData.email === newUser.email || userData.username == newUser.username)
         if(userAlreadyExists){
             throw new Error('O Email já esta cadastrado')
         }
@@ -42,6 +42,16 @@ export class UsersGatewayInMemory implements IUsersGateway {
             username: user.username,
             email: user.email
         } : [])
+        return targetUser
+    }
+
+    async findByUsername(username: string): Promise<Omit<User, "password">> {
+        const targetUser = this.usersList.find(user => user.username === username ? {
+            id: user.id,
+            username: user.username,
+            email: user.email
+        } : [])
+
         return targetUser
     }
     

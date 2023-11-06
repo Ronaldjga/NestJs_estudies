@@ -8,14 +8,14 @@ import { UsersGatewayMysqlDatabase } from '../geteway/users-gateway-mysql-databa
 export class UsersService {
     constructor(
         @Inject(UsersGatewayInMemory)
-        private authGatewayInMemory: UsersGatewayInMemory ,
+        private usersGatewayInMemory: UsersGatewayInMemory ,
         @Inject(UsersGatewayMysqlDatabase)
         private usersGatewayMysqlDatabase : UsersGatewayMysqlDatabase
     ){}
 
     async create(userCreateDto: ICreateUserDto) {
         const user = new User(userCreateDto.username, userCreateDto.email, userCreateDto.password)
-        await this.authGatewayInMemory.register(user)
+        await this.usersGatewayInMemory.register(user)
         await this.usersGatewayMysqlDatabase.register(user)
         return user
     }
@@ -24,7 +24,17 @@ export class UsersService {
         return await this.usersGatewayMysqlDatabase.findAll()
     }
 
-    async findById(id: string) {
-        return await this.usersGatewayMysqlDatabase.findById(id)
+    async findUserByIdOrUsername(idOrUsername: string) {
+        const findUserByUsernameInDatabse = await this.usersGatewayMysqlDatabase.findByUsername(idOrUsername)
+        const findUserByIdInDatabase = await this.usersGatewayMysqlDatabase.findById(idOrUsername)
+        if(findUserByUsernameInDatabse && !findUserByIdInDatabase){
+            return findUserByUsernameInDatabse
+        } else if(findUserByIdInDatabase && !findUserByUsernameInDatabse) {
+            return findUserByIdInDatabase
+        } else if(!findUserByIdInDatabase && !findUserByUsernameInDatabse){
+            throw new Error("Usuario não encontrado")
+        } else {
+            return findUserByUsernameInDatabse
+        }
     }
 }
