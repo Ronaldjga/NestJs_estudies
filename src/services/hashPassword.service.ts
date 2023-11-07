@@ -10,6 +10,7 @@ export class HashPassword {
     }
 
     async comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean>{
-        return await bcrypt.compare(plainPassword, hashedPassword)
+        const passwordIsCorrect = await bcrypt.compare(plainPassword, hashedPassword)
+        return passwordIsCorrect
     }
 }

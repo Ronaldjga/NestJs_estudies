@@ -32,7 +32,7 @@ export class UsersService {
         } else if(findUserByIdInDatabase && !findUserByUsernameInDatabse) {
             return findUserByIdInDatabase
         } else if(!findUserByIdInDatabase && !findUserByUsernameInDatabse){
-            throw new Error("Usuario não encontrado")
+            return null
         } else {
             return findUserByUsernameInDatabse
         }
