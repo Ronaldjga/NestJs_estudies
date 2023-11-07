@@ -3,6 +3,7 @@ import { User } from "../entity/user";
 import { IUsersGateway } from "./users-gateway-interface";
 import { Injectable } from "@nestjs/common";
 import { HashPassword } from "src/services/hashPassword.service";
+import { loginDto } from "src/modules/auth/dto/login-dto";
 
 @Injectable()
 export class UsersGatewayMysqlDatabase implements IUsersGateway{
@@ -72,6 +73,37 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
         })
 
         return targetUser
+    }
+
+    async deleteUser(user: loginDto): Promise<boolean> {
+        const targetUser = await this.prisma.user.findUnique({
+            where: {
+                username: user.username
+            }
+        })
+   
+        if(targetUser === null){
+            throw new Error("Usuario não foi encontrado")
+        } 
+
+        const passwordVerify = await this.hashService.comparePassword(user.password, targetUser.password)
+
+        if(passwordVerify === false){
+            throw new Error("Senha incorreta")
+        } else {
+            try{
+                const deleteUserProcess = await this.prisma.user.delete({
+                    where: {
+                        id: targetUser.id,
+                        username: targetUser.username,
+                        email: targetUser.email
+                    }
+                })
+                return true
+            } catch (error) {
+                throw new Error(error.message)
+            }
+        }
     }
 
 }

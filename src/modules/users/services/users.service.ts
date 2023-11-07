@@ -3,6 +3,7 @@ import { User } from '../entity/user';
 import { UsersGatewayInMemory } from '../geteway/users-gateway-in-memory';
 import { Inject, Injectable } from "@nestjs/common";
 import { UsersGatewayMysqlDatabase } from '../geteway/users-gateway-mysql-database';
+import { loginDto } from 'src/modules/auth/dto/login-dto';
 
 @Injectable()
 export class UsersService {
@@ -36,5 +37,10 @@ export class UsersService {
         } else {
             return findUserByUsernameInDatabse
         }
+    }
+
+    async deleteUser(user: loginDto){
+        const deletedUser = await this.usersGatewayMysqlDatabase.deleteUser(user)
+        return deletedUser
     }
 }

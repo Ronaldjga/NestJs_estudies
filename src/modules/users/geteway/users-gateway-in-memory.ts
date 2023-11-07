@@ -4,6 +4,7 @@ import { User } from "../entity/user";
 import { IUsersGateway } from "./users-gateway-interface";
 import { randomUUID } from "crypto";
 import { HashPassword } from "src/services/hashPassword.service";
+import { loginDto } from "src/modules/auth/dto/login-dto";
 
 @Injectable()
 export class UsersGatewayInMemory implements IUsersGateway {
@@ -55,4 +56,21 @@ export class UsersGatewayInMemory implements IUsersGateway {
         return targetUser
     }
     
+    async deleteUser(user: loginDto): Promise<boolean> {
+        const targetUser = this.usersList.find(userFromUserList => userFromUserList.username === user.username)
+        if(targetUser === null){
+            throw new Error("Usuario não encontrado")
+        }
+
+        const passwordVerify = await this.hashService.comparePassword(user.password, targetUser.password)
+
+        if(passwordVerify === false){
+            throw new Error("Senha incorreta")
+        } else {
+            const newUserList = this.usersList.filter(userFromUserList => userFromUserList.id != targetUser.id && userFromUserList.username != targetUser.username && userFromUserList.email != targetUser.email)
+            this.usersList = newUserList
+            return true
+        }
+    }
+
 }

@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
 import { UsersService } from "../services/users.service";
 import { ICreateUserDto } from "../dto/create-user-dto";
 import { Response } from "express";
 import { CreateUserPipe } from "../pipes/createUser.pipe";
 import { UsersGuard } from "../guards/users.guard";
+import { loginDto } from "src/modules/auth/dto/login-dto";
 
 @Controller('users')
 export class AuthController{
@@ -26,6 +27,21 @@ export class AuthController{
     async register(@Body(new CreateUserPipe()) body: ICreateUserDto, @Res() res: Response) {
         await this.usersService.create(body)
         return res.status(HttpStatus.CREATED).json([])
+    }
+
+    @Post("delete")
+    async deleteUser(@Body() body: loginDto, @Res() res: Response){
+        try{
+            const targetUserForDelete = await this.usersService.deleteUser(body)
+            return res.status(HttpStatus.NO_CONTENT).json({message: "Usuario excluido com sucesso"})
+        } catch(error) {
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error.message
+            }, HttpStatus.BAD_REQUEST, {
+                cause: error.message
+            })
+        }
     }
     
 }
