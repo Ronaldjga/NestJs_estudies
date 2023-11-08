@@ -5,11 +5,12 @@ import { Response } from "express";
 import { CreateUserPipe } from "../pipes/createUser.pipe";
 import { UsersGuard } from "../guards/users.guard";
 import { loginDto } from "src/modules/auth/dto/login-dto";
+import { AuthGuard } from "src/modules/auth/guards/auth.guard";
 
 @Controller('users')
-export class AuthController{
+export class UsersController{
     constructor(
-        private usersService: UsersService
+        private readonly usersService: UsersService
     ){}
 
     @Get("all")
@@ -30,6 +31,7 @@ export class AuthController{
     }
 
     @Post("delete")
+    @UseGuards(AuthGuard)
     async deleteUser(@Body() body: loginDto, @Res() res: Response){
         try{
             const targetUserForDelete = await this.usersService.deleteUser(body)

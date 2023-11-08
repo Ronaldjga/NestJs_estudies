@@ -41,6 +41,7 @@ export class UsersService {
 
     async deleteUser(user: loginDto){
         const deletedUser = await this.usersGatewayMysqlDatabase.deleteUser(user)
+        const deleteUserInMemory = await this.usersGatewayInMemory.deleteUser(user)
         return deletedUser
     }
 }

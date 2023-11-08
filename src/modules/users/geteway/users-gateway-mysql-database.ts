@@ -1,3 +1,4 @@
+import { AuthGetewayFromMysqlDatabase } from './../../auth/geteway/auth-geteway-from-mysql-database';
 import { PrismaService } from "src/databases/prisma.service";
 import { User } from "../entity/user";
 import { IUsersGateway } from "./users-gateway-interface";
@@ -9,7 +10,8 @@ import { loginDto } from "src/modules/auth/dto/login-dto";
 export class UsersGatewayMysqlDatabase implements IUsersGateway{
     constructor(
         private prisma : PrismaService,
-        private hashService : HashPassword
+        private hashService : HashPassword,
+        private readonly authGetewayFromMysqlDatabase : AuthGetewayFromMysqlDatabase
     ){}
 
     async register(newUser: User): Promise<void> {
@@ -76,14 +78,15 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
     }
 
     async deleteUser(user: loginDto): Promise<boolean> {
+        const session = await this.authGetewayFromMysqlDatabase.session() as Omit<User, 'password'>
         const targetUser = await this.prisma.user.findUnique({
             where: {
                 username: user.username
             }
         })
    
-        if(targetUser === null){
-            throw new Error("Usuario não foi encontrado")
+        if(targetUser.id != session.id){
+            throw new Error("Usuario da sessão atual não coincide com o usuario inserido")
         } 
 
         const passwordVerify = await this.hashService.comparePassword(user.password, targetUser.password)
@@ -99,6 +102,7 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
                         email: targetUser.email
                     }
                 })
+                const logoutAfterDelete = await this.authGetewayFromMysqlDatabase.logout()
                 return true
             } catch (error) {
                 throw new Error(error.message)

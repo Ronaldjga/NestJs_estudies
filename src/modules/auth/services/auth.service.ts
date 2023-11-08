@@ -1,10 +1,11 @@
 import { AuthGetewayFromMysqlDatabase } from './../geteway/auth-geteway-from-mysql-database';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { loginDto } from '../dto/login-dto';
 
 @Injectable()
 export class AuthService {
     constructor(
+        @Inject(AuthGetewayFromMysqlDatabase)
         private authGetewayFromMysqlDatabase: AuthGetewayFromMysqlDatabase
     ){}
 

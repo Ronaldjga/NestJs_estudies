@@ -5,6 +5,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthGetewayFromMysqlDatabase } from './geteway/auth-geteway-from-mysql-database';
 import { HashPassword } from 'src/services/hashPassword.service';
 import { PrismaService } from 'src/databases/prisma.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [],
@@ -13,7 +14,12 @@ import { PrismaService } from 'src/databases/prisma.service';
     AuthService,
     AuthGetewayFromMysqlDatabase,
     HashPassword,
-    PrismaService
+    PrismaService,
+    AuthGuard
   ],
+  exports: [
+    AuthGuard,
+    AuthGetewayFromMysqlDatabase
+  ]
 })
 export class AuthModule {}

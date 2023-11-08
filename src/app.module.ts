@@ -7,7 +7,7 @@ import { PrismaService } from './databases/prisma.service';
 
 @Global()
 @Module({
-  imports: [UsersModule, AuthModule],
+  imports: [AuthModule, UsersModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
   exports: [PrismaService]
