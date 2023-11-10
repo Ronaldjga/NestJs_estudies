@@ -23,8 +23,8 @@ export class AuthController {
     }
   }
 
-  @Get("logout")
   @UseGuards(AuthGuard)
+  @Get("logout")
   async logout(@Res() res: Response) {
     try{
       const logoutUser = await this.authService.logout()
@@ -35,6 +35,22 @@ export class AuthController {
         error: error.message
       }, HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error.message
+      })
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Post("delete")
+  async deleteUser(@Body() body: loginDto, @Res() res: Response){
+    try{
+      const targetUserForDelete = await this.authService.deleteUser(body)
+      return res.status(HttpStatus.NO_CONTENT).json({message: "Usuario excluido com sucesso"})
+    } catch(error) {
+      throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message
+      }, HttpStatus.BAD_REQUEST, {
+          cause: error.message
       })
     }
   }

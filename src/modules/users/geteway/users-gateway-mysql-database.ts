@@ -11,7 +11,6 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
     constructor(
         private prisma : PrismaService,
         private hashService : HashPassword,
-        private readonly authGetewayFromMysqlDatabase : AuthGetewayFromMysqlDatabase
     ){}
 
     async register(newUser: User): Promise<void> {
@@ -36,41 +35,25 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
         })
     }
     
-    async findAll(): Promise<Omit<User, "password">[]> {
-        const allUsers = await this.prisma.user.findMany({
-            select:{
-                id: true,
-                username: true,
-                email: true
-            }
-        })
+    async findAll(): Promise<User[]> {
+        const allUsers = await this.prisma.user.findMany()
         return allUsers
     }
 
-    async findById(id: string): Promise<Omit<User, 'password'>> {
+    async findById(id: string): Promise<User> {
         const targetUser = await this.prisma.user.findUnique({
             where: {
                 id: id
-            },
-            select: {
-                id: true,
-                username: true,
-                email: true
             }
         })
 
         return targetUser
     }
 
-    async findByUsername(username: string): Promise<Omit<User, "password">> {
+    async findByUsername(username: string): Promise<User> {
         const targetUser = await this.prisma.user.findUnique({
             where: {
                 username: username
-            },
-            select: {
-                id: true,
-                username: true,
-                email: true
             }
         })
 
@@ -78,16 +61,11 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
     }
 
     async deleteUser(user: loginDto): Promise<boolean> {
-        const session = await this.authGetewayFromMysqlDatabase.session() as Omit<User, 'password'>
         const targetUser = await this.prisma.user.findUnique({
             where: {
                 username: user.username
             }
         })
-   
-        if(targetUser.id != session.id){
-            throw new Error("Usuario da sessão atual não coincide com o usuario inserido")
-        } 
 
         const passwordVerify = await this.hashService.comparePassword(user.password, targetUser.password)
 
@@ -102,9 +80,10 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
                         email: targetUser.email
                     }
                 })
-                const logoutAfterDelete = await this.authGetewayFromMysqlDatabase.logout()
+                console.log("deletou o usuario")
                 return true
             } catch (error) {
+                console.log('deu erro ao deletar o usuario')
                 throw new Error(error.message)
             }
         }

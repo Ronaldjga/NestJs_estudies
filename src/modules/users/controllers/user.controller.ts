@@ -3,9 +3,7 @@ import { UsersService } from "../services/users.service";
 import { ICreateUserDto } from "../dto/create-user-dto";
 import { Response } from "express";
 import { CreateUserPipe } from "../pipes/createUser.pipe";
-import { UsersGuard } from "../guards/users.guard";
 import { loginDto } from "src/modules/auth/dto/login-dto";
-import { AuthGuard } from "src/modules/auth/guards/auth.guard";
 
 @Controller('users')
 export class UsersController{
@@ -19,7 +17,6 @@ export class UsersController{
     }
 
     @Get(":idOrUsername")
-    @UseGuards(UsersGuard)
     async getUserById(@Param('idOrUsername') idOrUsername: string){
         return await this.usersService.findUserByIdOrUsername(idOrUsername)
     }
@@ -31,7 +28,6 @@ export class UsersController{
     }
 
     @Post("delete")
-    @UseGuards(AuthGuard)
     async deleteUser(@Body() body: loginDto, @Res() res: Response){
         try{
             const targetUserForDelete = await this.usersService.deleteUser(body)

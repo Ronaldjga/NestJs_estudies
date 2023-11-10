@@ -6,11 +6,9 @@ import { CreateUserPipe } from "./pipes/createUser.pipe";
 import { UsersGatewayMysqlDatabase } from "./geteway/users-gateway-mysql-database";
 import { PrismaService } from "src/databases/prisma.service";
 import { HashPassword } from "src/services/hashPassword.service";
-import { AuthModule } from "../auth/auth.module";
-import { AuthGetewayFromMysqlDatabase } from "../auth/geteway/auth-geteway-from-mysql-database";
 
 @Module({
-    imports: [AuthModule],
+    imports: [],
     controllers: [UsersController],
     providers: [
         UsersService,
@@ -19,6 +17,9 @@ import { AuthGetewayFromMysqlDatabase } from "../auth/geteway/auth-geteway-from-
         UsersGatewayMysqlDatabase,
         PrismaService,
         HashPassword,
+    ],
+    exports: [
+        UsersService,
     ]
 })
 export class UsersModule {}

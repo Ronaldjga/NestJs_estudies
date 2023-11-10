@@ -26,32 +26,18 @@ export class UsersGatewayInMemory implements IUsersGateway {
         this.usersList.push(user)
     }
 
-    async findAll(): Promise<Omit<User, 'password'>[]> {
-        const allUsers = this.usersList.map(user => {
-            return {
-                id: user.id,
-                username: user.username,
-                email: user.email
-            }
-        })
+    async findAll(): Promise<User[]> {
+        const allUsers = this.usersList
         return allUsers
     }
 
-    async findById(id: string): Promise<Omit<User, 'password'>> {
-        const targetUser = this.usersList.find(user => user.id === id ? {
-            id: user.id,
-            username: user.username,
-            email: user.email
-        } : [])
+    async findById(id: string): Promise<User> {
+        const targetUser = this.usersList.find(user => user.id === id ? user : [])
         return targetUser
     }
 
-    async findByUsername(username: string): Promise<Omit<User, "password">> {
-        const targetUser = this.usersList.find(user => user.username === username ? {
-            id: user.id,
-            username: user.username,
-            email: user.email
-        } : [])
+    async findByUsername(username: string): Promise<User> {
+        const targetUser = this.usersList.find(user => user.username === username ? user : [])
 
         return targetUser
     }

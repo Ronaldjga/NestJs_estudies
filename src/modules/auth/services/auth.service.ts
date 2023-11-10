@@ -10,12 +10,17 @@ export class AuthService {
     ){}
 
     async login(user: loginDto){
-        const loginProcess = await this.authGetewayFromMysqlDatabase.login(user)
+        const loginProcess = await this.authGetewayFromMysqlDatabase.sigIn(user)
         return loginProcess
     }
 
     async logout() {
         const logoutProcess = await this.authGetewayFromMysqlDatabase.logout()
         return logoutProcess
+    }
+
+    async deleteUser(user: loginDto){
+        const deleteUserProcess = await this.authGetewayFromMysqlDatabase.deleteUser(user)
+        return deleteUserProcess
     }
 }

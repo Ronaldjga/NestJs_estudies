@@ -28,15 +28,7 @@ export class UsersService {
     async findUserByIdOrUsername(idOrUsername: string) {
         const findUserByUsernameInDatabse = await this.usersGatewayMysqlDatabase.findByUsername(idOrUsername)
         const findUserByIdInDatabase = await this.usersGatewayMysqlDatabase.findById(idOrUsername)
-        if(findUserByUsernameInDatabse && !findUserByIdInDatabase){
-            return findUserByUsernameInDatabse
-        } else if(findUserByIdInDatabase && !findUserByUsernameInDatabse) {
-            return findUserByIdInDatabase
-        } else if(!findUserByIdInDatabase && !findUserByUsernameInDatabse){
-            return null
-        } else {
-            return findUserByUsernameInDatabse
-        }
+        return findUserByUsernameInDatabse || findUserByIdInDatabase
     }
 
     async deleteUser(user: loginDto){
