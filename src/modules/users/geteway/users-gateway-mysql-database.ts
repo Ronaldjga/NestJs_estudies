@@ -5,12 +5,14 @@ import { IUsersGateway } from "./users-gateway-interface";
 import { Injectable } from "@nestjs/common";
 import { HashPassword } from "src/services/hashPassword.service";
 import { loginDto } from "src/modules/auth/dto/login-dto";
+import { MailService } from 'src/modules/mail/services/mail.service';
 
 @Injectable()
 export class UsersGatewayMysqlDatabase implements IUsersGateway{
     constructor(
         private prisma : PrismaService,
         private hashService : HashPassword,
+        private mailService : MailService
     ){}
 
     async register(newUser: User): Promise<void> {
@@ -33,6 +35,7 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway{
                 password: hashedPassword
             }
         })
+        const welcomeEmail = await this.mailService.sendWelcome({user: newUser.username, email: newUser.email})
     }
     
     async findAll(): Promise<User[]> {

@@ -6,9 +6,10 @@ import { CreateUserPipe } from "./pipes/createUser.pipe";
 import { UsersGatewayMysqlDatabase } from "./geteway/users-gateway-mysql-database";
 import { PrismaService } from "src/databases/prisma.service";
 import { HashPassword } from "src/services/hashPassword.service";
+import { MailModule } from "../mail/mail.module";
 
 @Module({
-    imports: [],
+    imports: [MailModule],
     controllers: [UsersController],
     providers: [
         UsersService,
