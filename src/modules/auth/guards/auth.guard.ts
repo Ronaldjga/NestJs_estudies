@@ -11,7 +11,6 @@ export class AuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext) {
         const request = context.switchToHttp().getRequest();
         const tokenProcess = this.extractTokenFromHeader(request)
-        // console.log("log guard, requisicao: ", request)
 
         if (!tokenProcess) {
             console.log('log guard, não foi autorizado')

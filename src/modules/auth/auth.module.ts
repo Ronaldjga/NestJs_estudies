@@ -13,15 +13,15 @@ import { UsersModule } from '../users/users.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: {expiresIn: '60s'}
-    })
+      signOptions: { expiresIn: '60s' },
+    }),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
     AuthGetewayFromMysqlDatabase,
     HashPassword,
-    AuthGuard
-  ]
+    AuthGuard,
+  ],
 })
 export class AuthModule {}
