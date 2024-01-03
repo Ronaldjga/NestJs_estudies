@@ -9,14 +9,9 @@ import { MailModule } from './modules/mail/mail.module';
 
 @Global()
 @Module({
-  imports: [
-    UsersModule,
-    AuthModule,
-    MailModule,
-    ConfigModule.forRoot(),
-  ],
+  imports: [UsersModule, AuthModule, MailModule, ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [AppService, PrismaService],
-  exports: [PrismaService]
+  exports: [PrismaService],
 })
 export class AppModule {}

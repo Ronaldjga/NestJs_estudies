@@ -11,18 +11,16 @@ import { MailerGateway } from './geteway/mailer-gateway';
         host: 'smtp.gmail.com',
         auth: {
           user: process.env.mailerUser,
-          pass: process.env.mailerPass
+          pass: process.env.mailerPass,
         },
       },
       defaults: {
-        from: '"No Reply" <noreply@example.com>'
+        from: '"No Reply" <noreply@example.com>',
       },
-    })
+    }),
   ],
   controllers: [MailController],
   providers: [MailService, MailerGateway],
-  exports: [
-    MailService
-  ]
+  exports: [MailService],
 })
 export class MailModule {}

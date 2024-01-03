@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MailService } from '../services/mail.service';
 
 @Controller('mail')

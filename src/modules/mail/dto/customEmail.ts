@@ -1,5 +1,5 @@
 export interface ICustomEmail {
-    to: string,
-    subject: string;
-    template: string;
+  to: string;
+  subject: string;
+  template: string;
 }
