@@ -10,7 +10,7 @@ export class MailerGateway implements IMailerGateway {
   async Welcome(user: string, to: string): Promise<void> {
     await this.mailerService.sendMail({
       to: to,
-      from: process.env.mailerUser,
+      from: process.env.MAILER_USER,
       subject: `Bem-vindo ${user} ao Projeto Groups em NestJs, criado por Ronaldjga`,
       html: `
                 <h1 style="color:red;">Bem-vindo</h1>
@@ -22,7 +22,7 @@ export class MailerGateway implements IMailerGateway {
   async SendEmailTo(customEmail: ICustomEmail): Promise<void> {
     await this.mailerService.sendMail({
       to: customEmail.to,
-      from: process.env.mailerUser,
+      from: process.env.MAILER_USER,
       subject: customEmail.subject,
       html: customEmail.template,
     });

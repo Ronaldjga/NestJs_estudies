@@ -10,8 +10,8 @@ import { MailerGateway } from './geteway/mailer-gateway';
       transport: {
         host: 'smtp.gmail.com',
         auth: {
-          user: process.env.mailerUser,
-          pass: process.env.mailerPass,
+          user: process.env.MAILER_USER,
+          pass: process.env.MAILER_PASS,
         },
       },
       defaults: {

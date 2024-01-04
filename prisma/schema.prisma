@@ -13,5 +13,39 @@ model User {
   email       String   @unique
   password    String
 
+  groups      Group[]
+  userMember  UserMember[]
   @@map("users")
+}
+
+model Group {
+  id            String   @id @default(uuid())
+  name          String
+  description   String
+
+  author        User     @relation(fields: [authorId], references: [id])
+  authorId      String
+
+  members       UserMember[]
+
+  @@map("groups")
+}
+
+
+model UserMember {
+  id            String @id @default(uuid())
+
+  user          User @relation(fields: [userId], references: [id])
+  userId        String
+
+  groups        Group @relation(fields: [groupsId], references: [id])
+  groupsId      String
+
+  role          ROLE @default(MEMBER)
+}
+
+
+enum ROLE {
+  ADMIN
+  MEMBER
 }

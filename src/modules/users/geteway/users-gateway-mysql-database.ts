@@ -29,17 +29,19 @@ export class UsersGatewayMysqlDatabase implements IUsersGateway {
       newUser.password,
     );
 
-    await this.prisma.user.create({
-      data: {
-        username: newUser.username,
+    await Promise.all([
+      await this.mailService.sendWelcome({
+        user: newUser.username,
         email: newUser.email,
-        password: hashedPassword,
-      },
-    });
-    await this.mailService.sendWelcome({
-      user: newUser.username,
-      email: newUser.email,
-    });
+      }),
+      await this.prisma.user.create({
+        data: {
+          username: newUser.username,
+          email: newUser.email,
+          password: hashedPassword,
+        },
+      }),
+    ]);
   }
 
   async findAll(): Promise<User[]> {
