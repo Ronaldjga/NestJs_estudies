@@ -6,10 +6,17 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PrismaService } from './databases/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { MailModule } from './modules/mail/mail.module';
+import { GroupsModule } from './modules/groups/groups.module';
 
 @Global()
 @Module({
-  imports: [UsersModule, AuthModule, MailModule, ConfigModule.forRoot()],
+  imports: [
+    UsersModule,
+    AuthModule,
+    MailModule,
+    ConfigModule.forRoot(),
+    GroupsModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
   exports: [PrismaService],
