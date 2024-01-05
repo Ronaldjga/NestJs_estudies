@@ -4,6 +4,7 @@ import { IGatewayGroupsInterface } from './gateway-groups-interface';
 import { ICreateGroup } from '../dto/create-group-dto';
 import { PrismaService } from 'src/databases/prisma.service';
 import { IAddMemberDTO } from '../dto/add-member-dto';
+import { IDeleteMemberDTO } from '../dto/delete-memeber-dto';
 
 @Injectable()
 export class GatewayGroupsMysqlDatabase implements IGatewayGroupsInterface {
@@ -95,5 +96,45 @@ export class GatewayGroupsMysqlDatabase implements IGatewayGroupsInterface {
     }
 
     return newMember;
+  }
+
+  async deleteMember(deleteMember: IDeleteMemberDTO, authorization: string) {
+    const verifyJwt = await this.jwt.verifyAsync(authorization, {
+      complete: true,
+    });
+
+    if (!verifyJwt) {
+      return 'JWT invalido';
+    }
+
+    const targetGroup = await this.prisma.group.findFirst({
+      where: {
+        id: deleteMember.groupId,
+        authorId: verifyJwt.payload.sub,
+      },
+      include: {
+        members: true,
+      },
+    });
+
+    if (!targetGroup) {
+      return 'Usuario não é author do Grupo que deseja adicionar um membro';
+    }
+
+    const memberAlredyExistInTargetGroup = targetGroup.members.find((e) =>
+      e.userId === deleteMember.userId ? e : null,
+    );
+
+    if (!memberAlredyExistInTargetGroup) {
+      return 'Membro não se encontra no grupo selecionado';
+    }
+
+    const userDeleted = await this.prisma.userMember.delete({
+      where: {
+        id: memberAlredyExistInTargetGroup.id,
+      },
+    });
+
+    return userDeleted;
   }
 }
