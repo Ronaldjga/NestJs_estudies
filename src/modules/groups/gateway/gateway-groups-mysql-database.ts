@@ -184,4 +184,64 @@ export class GatewayGroupsMysqlDatabase implements IGatewayGroupsInterface {
 
     return updateMemberRole;
   }
+
+  async allMembersFromTargetGroup(groupId: string, authorization: string) {
+    const verifyJwt = await this.jwt.verifyAsync(authorization, {
+      complete: true,
+    });
+
+    if (!verifyJwt) {
+      return;
+    }
+
+    const readMembers = await this.prisma.group.findMany({
+      where: {
+        id: groupId,
+      },
+      include: {
+        author: true,
+        members: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!readMembers) {
+      return;
+    }
+
+    return readMembers;
+  }
+
+  async allMembersFromAuthorsGroups(authorId: string, authorization: string) {
+    const verifyJwt = await this.jwt.verifyAsync(authorization, {
+      complete: true,
+    });
+
+    if (!verifyJwt) {
+      return;
+    }
+
+    const groupsFromAuthor = await this.prisma.group.findMany({
+      where: {
+        authorId: authorId,
+      },
+      include: {
+        author: true,
+        members: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!groupsFromAuthor) {
+      return;
+    }
+
+    return groupsFromAuthor;
+  }
 }

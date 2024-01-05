@@ -38,4 +38,18 @@ export class GroupsProvider {
       authorization,
     );
   }
+
+  async readTargetGroup(group: string, authorization: string) {
+    return await this.gatewayGroupsMysqlDatabase.allMembersFromTargetGroup(
+      group,
+      authorization,
+    );
+  }
+
+  async readAllGroupsFromAuthor(authorId: string, authorization: string) {
+    return await this.gatewayGroupsMysqlDatabase.allMembersFromAuthorsGroups(
+      authorId,
+      authorization,
+    );
+  }
 }

@@ -40,4 +40,26 @@ export class GroupsController {
       req.headers.authorization,
     );
   }
+
+  @Post('group')
+  async readTargetGroup(
+    @Body() body: { groupId: string },
+    @Req() req: Request,
+  ) {
+    return await this.groupsProvider.readTargetGroup(
+      body.groupId,
+      req.headers.authorization,
+    );
+  }
+
+  @Post('groupauthor')
+  async readGroupsFromAuthor(
+    @Body() body: { authorId: string },
+    @Req() req: Request,
+  ) {
+    return await this.groupsProvider.readAllGroupsFromAuthor(
+      body.authorId,
+      req.headers.authorization,
+    );
+  }
 }
