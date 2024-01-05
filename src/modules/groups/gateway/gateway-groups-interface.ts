@@ -6,4 +6,5 @@ export interface IGatewayGroupsInterface {
   create(group: ICreateGroup, authorization: string);
   addMember(addMember: IAddMemberDTO, authorization: string);
   deleteMember(deleteMember: IDeleteMemberDTO, authorization: string);
+  updateRole(updateRole: IAddMemberDTO, authorization: string);
 }

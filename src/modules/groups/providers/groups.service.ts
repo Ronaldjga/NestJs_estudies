@@ -31,4 +31,11 @@ export class GroupsProvider {
       authorization,
     );
   }
+
+  async updateMemberRole(member: IAddMemberDTO, authorization: string) {
+    return await this.gatewayGroupsMysqlDatabase.updateRole(
+      member,
+      authorization,
+    );
+  }
 }

@@ -32,4 +32,12 @@ export class GroupsController {
       req.headers.authorization,
     );
   }
+
+  @Post('updaterole')
+  async updateMemberRole(@Body() member: IAddMemberDTO, @Req() req: Request) {
+    return await this.groupsProvider.updateMemberRole(
+      member,
+      req.headers.authorization,
+    );
+  }
 }

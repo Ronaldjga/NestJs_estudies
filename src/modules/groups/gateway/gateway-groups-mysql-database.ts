@@ -137,4 +137,51 @@ export class GatewayGroupsMysqlDatabase implements IGatewayGroupsInterface {
 
     return userDeleted;
   }
+
+  async updateRole(updateRole: IAddMemberDTO, authorization: string) {
+    const verifyJwt = await this.jwt.verifyAsync(authorization, {
+      complete: true,
+    });
+
+    if (!verifyJwt) {
+      return 'JWT invalido';
+    }
+
+    const targetGroup = await this.prisma.group.findFirst({
+      where: {
+        id: updateRole.groupId,
+        authorId: verifyJwt.payload.sub,
+      },
+      include: {
+        members: true,
+      },
+    });
+
+    if (!targetGroup) {
+      return 'Usuario não é author do Grupo que deseja adicionar um membro';
+    }
+
+    const memberAlredyExistInTargetGroup = targetGroup.members.find((e) =>
+      e.userId === updateRole.userId ? e : null,
+    );
+
+    if (!memberAlredyExistInTargetGroup) {
+      return;
+    }
+
+    const updateMemberRole = await this.prisma.userMember.update({
+      where: {
+        id: memberAlredyExistInTargetGroup.id,
+      },
+      data: {
+        role: updateRole.role,
+      },
+    });
+
+    if (!updateMemberRole) {
+      return;
+    }
+
+    return updateMemberRole;
+  }
 }
