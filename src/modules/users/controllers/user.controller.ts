@@ -4,6 +4,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   Post,
   Res,
@@ -25,6 +26,7 @@ export class UsersController {
 
   @Get(':idOrUsername')
   async getUserById(@Param('idOrUsername') idOrUsername: string) {
+    throw new NotFoundException();
     return await this.usersService.findUserByIdOrUsername(idOrUsername);
   }
 
